@@ -44,7 +44,7 @@ def extract_text_from_pdf(file_path: str) -> list[dict]:
             # Correct escape characters only if genuinely present.
             text = text.replace("\\'", "'").replace('\\"', '"')
 
-            text = clean_text(text).replace("\n", "")
+            text = clean_text(text)
 
             if text:
                 pages.append(
@@ -62,6 +62,6 @@ def extract_text_from_pdf(file_path: str) -> list[dict]:
     return pages
 
 
-pages = extract_text_from_pdf("C:/Users/shasw/Downloads/CV.pdf")
+# pages = extract_text_from_pdf("C:/Users/shasw/Downloads/CV.pdf")
 
-print(repr(pages))
+# print(pages)
