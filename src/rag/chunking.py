@@ -2,6 +2,7 @@
 # splitting won't have the overlapping page cotext
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
 from src.rag.ingestion import extract_text_from_pdf
 
 
@@ -17,7 +18,7 @@ def chunk_pages(pages: list[dict], chunk_size: int, chunk_overlapp: int) -> list
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
-        chunk_overlapp=chunk_overlapp,
+        chunk_overlap=chunk_overlapp,
         separators=["\n\n", "\n", ",", ""],
     )
 
