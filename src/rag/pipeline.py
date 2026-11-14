@@ -1,5 +1,5 @@
-from rag.chunking import chunk_pages
-from rag.embeddings import generate_embeddings
+from src.rag.chunking import chunk_pages
+from src.rag.embeddings import generate_embeddings, store_embeddings
 from src.rag.ingestion import extract_text_from_pdf
 
 
@@ -13,4 +13,4 @@ texts = [chunk["text"] for chunk in chunks]
 
 embeddings = generate_embeddings(texts)
 
-store_embeddings(chunks, embeddings, document_id)
+store_embeddings(chunks, embeddings, "0", "0")

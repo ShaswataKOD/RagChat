@@ -1,0 +1,10 @@
+
+services:
+  chroma:
+    image: chromadb/chroma:1.5.9
+    container_name: ragchat-chroma
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./chroma_data:/data
+    restart: unless-stopped
