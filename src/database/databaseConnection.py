@@ -2,28 +2,37 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from pymongo import AsyncMongoClient
+from beanie import init_beanie
 
-from src.config import config
+from src.config.config import config
 
 
 @asynccontextmanager
 async def database_lifespan(app: FastAPI):
-    await startup_db_client(app)
 
-    yield
+    # 1. Create MongoDB client
+    client = AsyncMongoClient(config.database_url)
 
-    await shutdown_db_client(app)
+    try:
+        # 2. Verify database connectivity
+        await client.admin.command("ping")
 
+        # 3. Select database
+        database = client[config.database_name]
 
-async def startup_db_client(app: FastAPI):
-    app.state.mongodb_client = AsyncMongoClient(config.config.database_url)
+        # 4. Initialize Beanie
+        await init_beanie(database=database, document_models=[])
 
-    await app.state.mongodb_client.admin.command("ping")
+        # 5. Store client and database in application state
+        app.state.mongodb_client = client
+        app.state.database = database
 
-    print(f"MongoDB is connected at {config.config.database_url}")
+        print("MongoDB connected successfully")
+        print("Beanie initialized successfully")
 
+        yield
 
-async def shutdown_db_client(app: FastAPI):
-    await app.state.mongodb_client.close()
-
-    print("Database connection is shut down")
+    finally:
+        # 6. Close connection during application shutdown
+        await client.close()
+        print("MongoDB connection closed")
