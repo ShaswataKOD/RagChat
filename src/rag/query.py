@@ -1,30 +1,4 @@
-# # here we are having all the query for similarity searching
-
-# from src.rag.embeddings import generate_query_embedding
-# from src.rag.chromaClient import collection
-
-# # example query
-# query = "What is supervised learning?"
-
-# query_embedding = generate_query_embedding(query)
-
-
-# def search_similar_chunks(
-#     query_embedding: list[float], user_id: str, document_id: str, n_results: int = 3
-# ):
-#     results = collection.query(
-#         query_embeddings=[query_embedding],
-#         n_results=n_results,
-#         where={"$and": [{"user_id": user_id}, {"document_id": document_id}]},
-#     )
-
-#     return results
-
-
-# if __name__ == "__main__":
-#     print(search_similar_chunks(query_embedding, "0", "0", 3))
-
-
+from src.rag.generation import generate_answer
 from src.rag.embeddings import generate_query_embedding
 from src.rag.chromaClient import query_chunks, get_collection_count
 
@@ -37,19 +11,27 @@ def search_similar_chunks(query: str, n_results: int = 3):
     return results
 
 
-if __name__ == "__main__":
-    print("Collection count:", get_collection_count())
+def ask_question(question: str):
 
-    query = "What is supervised learning?"
+    # Step 1: Retrieve relevant chunks
+    results = search_similar_chunks(question)
 
-    results = search_similar_chunks(query, 3)
-
+    # Step 2: Extract retrieved text
     documents = results["documents"][0]
-    distances = results["distances"][0]
-    metadatas = results["metadatas"][0]
 
-    for index, document in enumerate(documents):
-        print(f"\n--- Result {index + 1} ---")
-        print("Distance:", distances[index])
-        print("Metadata:", metadatas[index])
-        print("Content:", document)
+    # Step 3: Construct context
+    context = "\n\n".join(documents)
+
+    # Step 4: Generate answer
+    answer = generate_answer(question, context)
+
+    return answer
+
+
+if __name__ == "__main__":
+    question = "What skills and technologies are mentioned in my CV?"
+
+    answer = ask_question(question)
+
+    print("\nQuestion:", question)
+    print("\nAnswer:", answer)
