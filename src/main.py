@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from src.router.document_router import document_router
 from src.router.authRoute import auth_router
 from src.database.databaseConnection import database_lifespan
 
@@ -24,6 +25,7 @@ app = FastAPI(
 )
 
 app.include_router(auth_router)
+app.include_router(document_router)
 
 
 @app.get("/", tags=["General"])

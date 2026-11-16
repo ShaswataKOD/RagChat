@@ -5,7 +5,7 @@ from jwt.exceptions import InvalidTokenError
 import jwt
 
 from src.config.config import config
-from src.models.user import User
+from src.model.User import User
 from src.util.generate_token import ALGORITHM
 
 

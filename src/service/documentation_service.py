@@ -1,8 +1,7 @@
 import uuid
 from pathlib import Path
 
-
-from beanie import Document, PydanticObjectId
+from beanie import PydanticObjectId
 from fastapi import File, UploadFile
 
 from src.config.config import config
