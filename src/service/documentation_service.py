@@ -3,9 +3,11 @@ from pathlib import Path
 
 from beanie import PydanticObjectId
 from fastapi import File, UploadFile
+from fastapi.concurrency import run_in_threadpool
 
 from src.config.config import config
 from src.model.document import DocumentStatus, UploadedDocument
+from src.rag.pipeline import ingest_document
 
 
 class DocumentService:
@@ -112,11 +114,29 @@ class DocumentService:
                 user_id=user_id, filename=filename, file_path=str(file_path)
             )
 
-            return document
-
         except Exception:
             # 4. Cleanup if something fails
             if file_path and file_path.exists():
                 file_path.unlink()
 
             raise
+        
+       
+        try:
+           document.status = DocumentStatus.PROCESSING
+           
+           await document.save()
+           
+           await run_in_threadpool(ingest_document,str(file_path),str(user_id),str(document.id))
+           
+           
+           document.status = DocumentStatus.COMPLETED
+           await document.save()
+           
+           return document
+       
+        except Exception:
+           document.status = DocumentStatus.FAILED
+           await document.save()
+           raise
+            
