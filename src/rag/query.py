@@ -45,15 +45,18 @@ def ask_question(question: str, user_id: str, document_id: str):
     if not documents:
         return "No relevant information found in this document."
 
+    metadatas = results.get("metadatas")
+
+
+    metadatas = metadatas[0] if metadatas else []
+
+    context_parts = []
+
+    for text, metadata in zip(documents, metadatas):
+        page = metadata.get("page_number", "Unknown")
+
+        context_parts.append(f"[Page {page}]\n{text}")
+
     context = "\n\n".join(documents)
 
     return generate_answer(question, context)
-
-
-# if __name__ == "__main__":
-#     question = "What skills and technologies are mentioned in my CV?"
-
-#     answer = ask_question(question)
-
-#     print("\nQuestion:", question)
-#     print("\nAnswer:", answer)
