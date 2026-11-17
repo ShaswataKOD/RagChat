@@ -30,9 +30,9 @@ def search_similar_chunks(
     return results
 
 
-def ask_question(question: str, user_id: str, document_id: str):
+def ask_question(question: str, user_id: str, document_id: str, n_results: int = 3):
     results = search_similar_chunks(
-        query=question, user_id=user_id, document_id=document_id
+        query=question, user_id=user_id, document_id=document_id, n_results=n_results
     )
 
     documents = results.get("documents")
@@ -42,21 +42,18 @@ def ask_question(question: str, user_id: str, document_id: str):
 
     documents = documents[0]
 
-    if not documents:
-        return "No relevant information found in this document."
-
     metadatas = results.get("metadatas")
-
 
     metadatas = metadatas[0] if metadatas else []
 
     context_parts = []
 
-    for text, metadata in zip(documents, metadatas):
+    for index, text in enumerate(documents):
+        metadata = metadatas[index] if index < len(metadatas) else {}
         page = metadata.get("page_number", "Unknown")
 
         context_parts.append(f"[Page {page}]\n{text}")
 
-    context = "\n\n".join(documents)
+    context = "\n\n".join(context_parts)
 
     return generate_answer(question, context)

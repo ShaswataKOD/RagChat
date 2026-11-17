@@ -11,6 +11,7 @@ class Config(BaseSettings):
     secret: str
     ACCESS_TOKEN_EXPIRE_MINUTES: float
     MAX_FILE_SIZE: int
+    MODEL_NAME: str = ""
 
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", extra="ignore"

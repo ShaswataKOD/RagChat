@@ -25,8 +25,8 @@ def store_embeddings(
     documents = []
     metadatas = []
 
-    for index, chunk in enumerate(chunks):
-        ids.append(f"{document_id}_chunk_{index}")
+    for chunk in chunks:
+        ids.append(chunk["chunk_id"])
 
         documents.append(chunk["text"])
 
@@ -34,7 +34,8 @@ def store_embeddings(
             {
                 "user_id": user_id,
                 "document_id": document_id,
-                "chunk_index": index,
+                "chunk_id": chunk["chunk_id"],
+                "chunk_index": chunk["chunk_index"],
                 "page_number": chunk["page_number"],
             }
         )

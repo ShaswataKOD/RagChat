@@ -101,3 +101,19 @@ def delete_collection():
         print(f"Collection '{COLLECTION_NAME}' deleted successfully.")
     else:
         print(f"Collection '{COLLECTION_NAME}' does not exist.")
+
+
+def get_collection_details(user_id: str, document_id: str):
+
+    collection = get_or_create_collection()
+
+    results = collection.get(
+        where={"$and": [{"user_id": user_id}, {"document_id": document_id}]},
+        # include=["documents", "metadatas"],
+    )
+
+    print("Number of records:", len(results["ids"]))
+    print("IDs:", results["ids"])
+    print("Metadata:", results["metadatas"])
+
+    return results
