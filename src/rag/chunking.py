@@ -6,7 +6,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from src.rag.ingestion import extract_text_from_pdf
 
 
-def chunk_pages(pages: list[dict], chunk_size: int, chunk_overlapp: int) -> list[dict]:
+def chunk_pages(
+    pages: list[dict], chunk_size: int, chunk_overlapp: int, document_id: str
+) -> list[dict]:
 
     if chunk_size <= 0:
         raise ValueError("Chunk size must be greater than zero")
@@ -36,6 +38,12 @@ def chunk_pages(pages: list[dict], chunk_size: int, chunk_overlapp: int) -> list
 
         for index, chunk_text in enumerate(page_chunks):
             chunks.append(
-                {"page_number": page_number, "chunk_index": index, "text": chunk_text}
+                {
+                    "page_number": page_number,
+                    "chunk_index": index,
+                    "text": chunk_text,
+                    "chunk_id": f"{document_id}_p{page_number}_c{index}",
+                    "document_id": document_id,
+                }
             )
     return chunks
