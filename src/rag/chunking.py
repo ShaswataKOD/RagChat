@@ -9,12 +9,13 @@ from src.rag.ingestion import extract_text_from_pdf
 def chunk_pages(pages: list[dict], chunk_size: int, chunk_overlapp: int) -> list[dict]:
 
     if chunk_size <= 0:
-        raise ValueError("chunk size is negative")
+        raise ValueError("Chunk size must be greater than zero")
 
-    if chunk_size < 0 or chunk_overlapp > chunk_size:
-        raise ValueError(
-            "chunk overlap must be non-negative and can't be greater thn chunk size"
-        )
+    if chunk_overlapp < 0:
+        raise ValueError("Chunk overlap cannot be negative")
+
+    if chunk_overlapp >= chunk_size:
+        raise ValueError("Chunk overlap must be smaller than chunk size")
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
