@@ -1,15 +1,22 @@
-#  register incoming and returning for type safety
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 
-class RegisterIncoming(BaseModel):
+class RegisterRequest(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=128, pattern=r"^[a-zA-Z0-9]+$")
+
+
+class LoginRequest(BaseModel):
     email: EmailStr
     password: str
-    name = None
-    gender = None
 
 
 class RegisterResponse(BaseModel):
-    email: EmailStr
     id: str
+    email: EmailStr
     message: str
+
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
