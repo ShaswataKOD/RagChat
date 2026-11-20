@@ -11,7 +11,9 @@ def ingest_document(file_path: str, user_id: str, document_id: str) -> dict:
     pages = extract_text_from_pdf(file_path)
 
     # Step 2: Generate chunks
-    chunks = chunk_pages(pages, chunk_size=1000, chunk_overlapp=200)
+    chunks = chunk_pages(
+        pages, chunk_size=1000, chunk_overlapp=200, document_id=document_id
+    )
 
     if not chunks:
         raise ValueError("No chunks were generated from the PDF.")

@@ -60,8 +60,3 @@ def extract_text_from_pdf(file_path: str) -> list[dict]:
         )
 
     return pages
-
-
-# pages = extract_text_from_pdf("C:/Users/shasw/Downloads/CV.pdf")
-
-# print(pages)

@@ -3,6 +3,14 @@ from src.router.chat_router import chat_router
 from src.router.document_router import document_router
 from src.router.authRoute import auth_router
 from src.database.databaseConnection import database_lifespan
+from src.middleware.performance import measure_response_time
+import logging
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
 
 app = FastAPI(
     title="RAG Chat API",
@@ -28,6 +36,10 @@ app = FastAPI(
 app.include_router(auth_router)
 app.include_router(document_router)
 app.include_router(chat_router)
+
+
+# register the middleware
+app.middleware(middleware_type="http")(measure_response_time)
 
 
 @app.get("/", tags=["General"])
