@@ -4,6 +4,13 @@ from src.router.document_router import document_router
 from src.router.authRoute import auth_router
 from src.database.databaseConnection import database_lifespan
 from src.middleware.performance import measure_response_time
+import logging
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
 
 app = FastAPI(
     title="RAG Chat API",
