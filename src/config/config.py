@@ -14,6 +14,7 @@ class Config(BaseSettings):
     MODEL_NAME: str = ""
     API_KEY: str
     GEMINI_MODEL: str
+    COHERE_API_KEY: str
 
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
