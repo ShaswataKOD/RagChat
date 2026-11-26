@@ -74,7 +74,7 @@ class chatService:
         if not document_id:
             raise ValueError("doc id is invalid")
 
-        existing_user = await User.find_one(user_id)
+        existing_user = await User.get(user_id)
 
         if existing_user:
             existing_document = await UploadedDocument.find_one(
