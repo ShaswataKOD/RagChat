@@ -18,3 +18,12 @@ async def chat_with_document(
     return await ChatController.chat_with_document(
         document_id=document_id, user_id=current_user.id, question=request.question
     )
+
+
+@chat_router.get("/{document_id}/history")
+async def get_document_chat(
+    document_id: PydanticObjectId, current_user: User = Depends(get_current_user)
+):
+    return await ChatController.get_document_messages(
+        document_id=document_id, user_id=current_user.id
+    )
