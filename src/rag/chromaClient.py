@@ -70,7 +70,7 @@ def upsert_chunks(
 
 def query_chunks(
     query_embedding: list[float],
-    n_results: int = 3,
+    n_results: int = 15,
     where: dict[str, Any] | None = None,
 ):
     """
